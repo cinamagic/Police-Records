@@ -1,0 +1,15 @@
+{
+  "name": "local-crms",
+  "version": "1.0.0",
+  "description": "Locally hosted Criminal Records Management System with SQLite migrations and bidirectional field-device sync.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "migrate": "node scripts/migrate.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
