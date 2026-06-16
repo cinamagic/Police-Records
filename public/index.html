@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CRMS Local Command</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">C</span>
+          <div>
+            <strong>CRMS</strong>
+            <small>Local command node</small>
+          </div>
+        </div>
+        <nav>
+          <button class="nav-item active" data-view="records">Records</button>
+          <button class="nav-item" data-view="sync">Field Sync</button>
+          <button class="nav-item" data-view="audit">Audit</button>
+        </nav>
+        <div class="device-panel">
+          <span class="status-dot"></span>
+          <div>
+            <strong>Station online</strong>
+            <small>SQLite WAL mode</small>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <h1>Criminal Records Management</h1>
+            <p>Search, manage, and synchronize protected criminal records from a local agency server.</p>
+          </div>
+          <button id="newRecordBtn" class="primary">New record</button>
+        </header>
+
+        <section class="stats" id="stats"></section>
+
+        <section id="recordsView" class="view active">
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="Search CRN, name, national ID, fingerprint">
+            <select id="statusFilter">
+              <option value="all">All status</option>
+              <option value="active">Active</option>
+              <option value="monitored">Monitored</option>
+              <option value="detained">Detained</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            <select id="riskFilter">
+              <option value="all">All risk</option>
+              <option value="high">High risk</option>
+              <option value="medium">Medium risk</option>
+              <option value="low">Low risk</option>
+            </select>
+          </div>
+
+          <div class="workspace">
+            <div class="record-list" id="recordList"></div>
+            <article class="detail" id="recordDetail"></article>
+          </div>
+        </section>
+
+        <section id="syncView" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Bidirectional Field Sync</h2>
+              <p>Export station changes to offline devices, then import device changes when they reconnect.</p>
+            </div>
+            <button id="refreshDevices">Refresh devices</button>
+          </div>
+          <div class="sync-grid">
+            <form id="exportForm" class="panel">
+              <h3>Export changes</h3>
+              <label>Field device ID <input name="device" value="tablet-alpha"></label>
+              <label>Since change ID <input name="since" type="number" min="0" value="0"></label>
+              <button class="primary" type="submit">Build export packet</button>
+              <textarea id="exportOutput" spellcheck="false"></textarea>
+            </form>
+            <form id="importForm" class="panel">
+              <h3>Import packet</h3>
+              <label>Paste field-device packet <textarea name="packet" spellcheck="false"></textarea></label>
+              <button class="primary" type="submit">Import changes</button>
+              <pre id="importResult"></pre>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Registered devices</h3>
+            <div id="devicesTable" class="table"></div>
+          </div>
+        </section>
+
+        <section id="auditView" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Audit Trail</h2>
+              <p>Every view, edit, delete, and sync operation is logged locally.</p>
+            </div>
+          </div>
+          <div id="auditTable" class="table"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="recordDialog">
+      <form id="recordForm" method="dialog">
+        <header>
+          <h2>Create record</h2>
+          <button type="button" class="icon" id="closeDialog">x</button>
+        </header>
+        <div class="form-grid">
+          <label>First name <input name="first_name" required></label>
+          <label>Middle name <input name="middle_name"></label>
+          <label>Last name <input name="last_name" required></label>
+          <label>Date of birth <input name="date_of_birth" type="date"></label>
+          <label>Gender <input name="gender"></label>
+          <label>Nationality <input name="nationality"></label>
+          <label>National ID <input name="national_id"></label>
+          <label>Fingerprint ID <input name="fingerprint_id"></label>
+          <label>Status
+            <select name="status">
+              <option>active</option>
+              <option>monitored</option>
+              <option>detained</option>
+              <option>inactive</option>
+            </select>
+          </label>
+          <label>Risk
+            <select name="risk_level">
+              <option>medium</option>
+              <option>high</option>
+              <option>low</option>
+            </select>
+          </label>
+          <label class="wide">Address <input name="address"></label>
+          <label class="wide">Aliases, comma separated <input name="aliases"></label>
+          <label class="wide">Notes <textarea name="notes"></textarea></label>
+        </div>
+        <footer>
+          <button type="button" id="cancelRecord">Cancel</button>
+          <button class="primary" type="submit">Create record</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
